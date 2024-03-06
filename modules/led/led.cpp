@@ -15,8 +15,6 @@
 
 //=====[Declaration and initialization of private global objects]===============
 
-//PwmOut RGBLed[] = {(PB_4), (PA_0), (PD_12)};
-
 static PwmOut* red;
 static PwmOut* green;
 static PwmOut* blue;

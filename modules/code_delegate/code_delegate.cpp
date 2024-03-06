@@ -10,6 +10,12 @@
 
 //=====[Declaration of private defines]========================================
 
+typedef enum
+{
+    WAITING,
+    SCANNING
+} code_delegate_state_t;
+
 //=====[Declaration of private data types]=====================================
 
 //=====[Declaration and initialization of public global objects]===============
@@ -20,7 +26,12 @@
 
 //=====[Declaration and initialization of private global variables]============
 
-char code[100];
+static char code[100];
+
+static char tempCode[100];
+
+static code_delegate_state_t code_delegate_state = WAITING;
+
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -37,6 +48,33 @@ void codeDelegateInit()
 
 void codeDelegateUpdate()
 {
+    switch(code_delegate_state)
+    {
+        case WAITING:
+            if (matrixKeypadUpdate() == '#')
+            {
+                memset(code, 0, sizeof code);
+                memset(tempCode, 0, sizeof tempCode);
+                code_delegate_state = SCANNING;
+            }
+            break;
+        case SCANNING:
+            char keypadOutput[] = {matrixKeypadUpdate()};
+            switch (keypadOutput[0])
+            {
+                case '\0': //And other ignore cases. . .
+
+                    break;
+                case '#':
+                    memcpy(code, &tempCode, sizeof tempCode);
+                    code_delegate_state = WAITING;
+                    break;
+                default:
+                    strcat(tempCode, keypadOutput);
+                    break;
+            }
+            break;
+    }
     
 }
 

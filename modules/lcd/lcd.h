@@ -15,6 +15,8 @@ void lcdCharPositionWrite( uint8_t charPositionX, uint8_t charPositionY );
 
 void lcdStringWrite( const char * str );
 
+void lcdClear();
+
 //=====[#include guards - end]=================================================
 
 #endif // _LCD_H_

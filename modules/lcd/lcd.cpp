@@ -178,6 +178,15 @@ void lcdStringWrite( const char * str )
     }
 }
 
+void lcdClear()
+{
+    lcdCharPositionWrite( 0,0 );
+    lcdStringWrite("                ");
+    lcdCharPositionWrite( 0,1 );
+    lcdStringWrite("                ");
+}
+
+
 //=====[Implementations of private functions]==================================
 
 static void lcdCodeWrite( bool type, uint8_t dataBus )
