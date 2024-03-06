@@ -37,7 +37,7 @@ void attendanceTrackingUpdate()
 {
     codeDelegateUpdate();
 
-    char* newestCode = getNewestCode();
+    char* newestCode = getNewestCode(); //The book would just use the uodate to return this
 
     if (isCodeForInstructor(newestCode))
     {

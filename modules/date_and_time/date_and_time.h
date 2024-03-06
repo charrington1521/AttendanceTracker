@@ -1,7 +1,9 @@
 //=====[#include guards - begin]===============================================
 
-#ifndef _CAMERA_H_
-#define _CAMERA_H_
+#ifndef _DATE_AND_TIME_H_
+#define _DATE_AND_TIME_H_
+
+#include <time.h>
 
 //=====[Declaration of public defines]=========================================
 
@@ -9,6 +11,11 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
+tm* dateAndTimeRead();
+
+void dateAndTimeWrite( int year, int month, int day, 
+                       int hour, int minute, int second );
+
 //=====[#include guards - end]=================================================
 
-#endif // _CAMERA_H_
+#endif // _DATE_AND_TIME_H_

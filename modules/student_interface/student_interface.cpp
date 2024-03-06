@@ -1,5 +1,6 @@
 //=====[Libraries]=============================================================
 
+#include "attendance_tracking_system.h"
 #include "mbed.h"
 #include "arm_book_lib.h"
 
@@ -20,7 +21,11 @@
 
 //=====[Declaration and initialization of private global variables]============
 
+int lcd_write_delay_ms;
+
 //=====[Declarations (prototypes) of private functions]========================
+
+void checkInMessage();
 
 //=====[Implementations of public functions]===================================
 
@@ -30,21 +35,21 @@
  */
 bool isCodeForAStudent(char* code)
 {
-    //Should this be public???
-    return false;
+    return isCodeAStudent(code);
 }
 
 //Should this be public???
 void checkInStudent(char* code)
 {
-    //Should simply use the class_info modules check in
+    checkInStudentByCode(code);
 }
 
 void studentInterfaceInit()
 {
     classInfoInit();
     lcdInit();
-    ledInit(D1, D2, D3);
+    setColor(BLUE);
+    ledInit(PB_4, PA_0, PD_12);
 }
 
 /**
@@ -53,9 +58,31 @@ void studentInterfaceInit()
  */
 void studentInterfaceUpdate(char * code)
 {
+    lcd_write_delay_ms += TIME_INCREMENT_MS;
+    if (lcd_write_delay_ms >= 1000)
+    {
+        lcdClear();
+        lcdCharPositionWrite( 0,0 );
+        lcdStringWrite("Welcome. . .    ");
+    }
+    if (isCodeForAStudent(code))
+    {
+        checkInStudent(code);
+        blinkLed();
+        checkInMessage();
+    }
+
+    ledUpdate();
     // Should check if code belongs to a student, and if it does
     // Should blink the led, check the student in, and display some
     // message to the LCD 
 }
 
 //=====[Implementations of private functions]==================================
+
+void checkInMessage()
+{
+    lcdClear();
+    lcdCharPositionWrite( 0,0 );
+    lcdStringWrite("Welcome. . .    ");
+}
