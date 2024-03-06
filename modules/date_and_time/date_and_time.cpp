@@ -20,11 +20,11 @@
 
 //=====[Implementations of public functions]===================================
 
-char* dateAndTimeRead()
+tm* dateAndTimeRead()
 {
     time_t epochSeconds;
     epochSeconds = time(NULL);
-    return ctime(&epochSeconds);    
+    return gmtime(&epochSeconds);    
 }
 
 void dateAndTimeWrite( int year, int month, int day, 
