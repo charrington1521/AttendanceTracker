@@ -5,6 +5,8 @@
 
 //=====[Declaration of public defines]=========================================
 
+#include "mbed.h"
+
 //=====[Declaration of public data types]======================================
 
 typedef enum
