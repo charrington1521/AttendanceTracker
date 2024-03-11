@@ -3,24 +3,16 @@
 #include "mbed.h"
 #include "arm_book_lib.h"
 
+#include "lcd.h"
 #include "class_info.h"
 #include "date_and_time.h"
 #include <time.h>
 
 //=====[Declaration of private defines]========================================
 
-#define NUM_STUDENT_CODES                    1
-
-const char* STUDENT_CODES[NUM_STUDENT_CODES] = {"123abc"};
+const char* STUDENT_CODES[NUM_STUDENTS] = {"123ABC", "ABCDAB"};
 
 //=====[Declaration of private data types]=====================================
-
-typedef enum
-{
-    EARLY,
-    ON_TIME,
-    LATE
-} student_time_result_t;
 
 typedef enum
 {
@@ -40,9 +32,9 @@ typedef enum
  * When the class starts
  *  [0] Hour, [1] minute
  */
-static int classStartTime[2];
+static int classStartTime[2] = {8, 10};
 
-static student_time_result_t student_time_results[NUM_STUDENT_CODES];
+static StudentInfo* studentInfo[NUM_STUDENTS];
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -60,20 +52,23 @@ bool isCodeAStudent(char* code)
  */
 bool isStudentOnTime(char* code)
 {
-    return student_time_results[indexOfStudentByCode(code)] == ON_TIME;
+    return studentByIndex(indexOfStudentByCode(code))->timeResult == ON_TIME;
 }
 
 void checkInStudentByCode(char* code)
 {
     tm* currentTime = dateAndTimeRead();
     student_time_result_t check_in_result;
-    if (currentTime->tm_hour < classStartTime[HOUR]) 
-    {
-        check_in_result = EARLY;
-    }
-    else if (currentTime->tm_hour > classStartTime[HOUR])
+    char str[2];
+    sprintf(str, "%d", currentTime->tm_hour%24);
+    lcdStringWrite(str);
+    if (currentTime->tm_hour%24 < classStartTime[HOUR]) 
     {
         check_in_result = LATE;
+    }
+    else if (currentTime->tm_hour%24 > classStartTime[HOUR])
+    {
+        check_in_result = EARLY;
     }
     else
     {
@@ -91,20 +86,33 @@ void checkInStudentByCode(char* code)
         }
     }
 
-    student_time_results[indexOfStudentByCode(code)] = check_in_result;
+    studentByIndex(indexOfStudentByCode(code))->timeResult = check_in_result;
 }
 
 /**
  *  What should this take as input?
  */
-void setClassStartTime()
+void setClassStartTime(int hour, int min)
 {
+    classStartTime[0] = hour;
+    classStartTime[1] = min;
+}
 
+StudentInfo * studentByIndex(int index)
+{
+    return studentInfo[index];
 }
 
 void classInfoInit()
 {
     //Possibly implement a pull of stored info from flash mem. . .
+    for (int i = 0; i < NUM_STUDENTS; i++)
+    {
+        studentInfo[i] = new StudentInfo;
+        studentInfo[i]->timeResult = ABSENT;
+    }
+    studentInfo[0]->name = "Amy";
+    studentInfo[1]->name = "Bob";
 }
 
 void classInfoUpdate()
@@ -122,7 +130,7 @@ static int indexOfStudentByCode(char* code)
 {
     int toReturn = -1;
 
-    for (int i = 0; i < NUM_STUDENT_CODES; i++)
+    for (int i = 0; i < NUM_STUDENTS; i++)
     {
         if (strcmp(code, STUDENT_CODES[i]) == 0)
         {

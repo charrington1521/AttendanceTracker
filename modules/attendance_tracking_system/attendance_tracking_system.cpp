@@ -1,5 +1,6 @@
 //=====[Libraries]=============================================================
 
+#include "lcd.h"
 #include "mbed.h"
 #include "arm_book_lib.h"
 
@@ -7,6 +8,7 @@
 #include "instructor_interface.h"
 #include "student_interface.h"
 #include "code_delegate.h"
+#include "date_and_time.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -28,6 +30,8 @@ bool isInstructorInterface = false;
 
 void attendanceTrackingInit()
 {
+    dateAndTimeWrite(2024, 03, 10, 8, 10, 00);
+    lcdInit();
     codeDelegateInit();
     instructorInterfaceInit();
     studentInterfaceInit();
@@ -35,19 +39,6 @@ void attendanceTrackingInit()
 
 void attendanceTrackingUpdate()
 {
-    codeDelegateUpdate();
-
-    char* newestCode = getNewestCode(); //The book would just use the uodate to return this
-
-    if (isCodeForInstructor(newestCode))
-    {
-        isInstructorInterface = true;
-    }
-    else
-    {
-        //And some other stuff. . .
-        studentInterfaceUpdate(newestCode);
-    }
     if (isInstructorInterface)
     {
         instructorInterfaceUpdate();
@@ -56,7 +47,24 @@ void attendanceTrackingUpdate()
             isInstructorInterface = false;
         }
     }
-    
+    else
+    {
+        codeDelegateUpdate();
+
+        //lcdStringWrite("Newest Code");
+        char* newestCode = getNewestCode(); 
+
+        if (isCodeForInstructor(newestCode))
+        {
+            isInstructorInterface = true;
+            instructorInterfaceReset();
+        }
+        else
+        {
+            studentInterfaceUpdate(newestCode);
+        }
+    }
+
     delay (TIME_INCREMENT_MS);
 }
 

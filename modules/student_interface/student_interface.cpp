@@ -46,7 +46,10 @@ void checkInStudent(char* code)
 
 void studentInterfaceInit()
 {
+    consoleWrite("Student Interface Init\r\n", 24);
     classInfoInit();
+    lcdInit();
+    setColor(NO_COLOR);
     ledInit(PB_4, PA_0, PD_12);
     setColor(NO_COLOR);
 }
@@ -57,6 +60,7 @@ void studentInterfaceInit()
  */
 void studentInterfaceUpdate(char * code)
 {
+    consoleWrite("Student Interface Update\r\n", 26);
     lcd_write_delay_ms += TIME_INCREMENT_MS;
     if (lcd_write_delay_ms >= 1000)
     {

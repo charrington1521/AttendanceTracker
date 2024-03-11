@@ -3,6 +3,8 @@
 #ifndef _ATTENDANCE_TRACKING_H_
 #define _ATTENDANCE_TRACKING_H_
 
+#include "lcd.h"
+
 //=====[Declaration of public defines]=========================================
 
 #define TIME_INCREMENT_MS                                   10

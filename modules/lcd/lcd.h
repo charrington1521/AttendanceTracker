@@ -3,13 +3,15 @@
 #ifndef _LCD_H_
 #define _LCD_H_
 
+#include "stdint.h"
+
 //=====[Declaration of public defines]=========================================
 
 //=====[Declaration of public data types]======================================
 
 //=====[Declarations (prototypes) of public functions]=========================
 
-void lcdInit( void );
+void lcdInit();
  
 void lcdCharPositionWrite( uint8_t charPositionX, uint8_t charPositionY );
 

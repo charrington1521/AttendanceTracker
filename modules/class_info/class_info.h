@@ -5,7 +5,23 @@
 
 //=====[Declaration of public defines]=========================================
 
+#define NUM_STUDENTS                    2
+
 //=====[Declaration of public data types]======================================
+
+typedef enum
+{
+    EARLY,
+    ON_TIME,
+    LATE,
+    ABSENT
+} student_time_result_t;
+
+struct StudentInfo
+{
+    const char * name;
+    student_time_result_t timeResult;
+};
 
 //=====[Declarations (prototypes) of public functions]=========================
 
@@ -15,7 +31,9 @@ bool isStudentOnTime(char* code);
 
 void checkInStudentByCode(char* code);
 
-void setClassStartTime(); //What should the input be?
+void setClassStartTime(int hour, int min); //What should the input be?
+
+StudentInfo * studentByIndex(int index);
 
 void classInfoInit();
 

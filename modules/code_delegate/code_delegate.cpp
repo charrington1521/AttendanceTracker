@@ -1,6 +1,7 @@
 //=====[Libraries]=============================================================
 
 #include "attendance_tracking_system.h"
+#include "lcd.h"
 #include "mbed.h"
 #include "arm_book_lib.h"
 
@@ -62,7 +63,7 @@ void codeDelegateUpdate()
             char keypadOutput[] = {matrixKeypadUpdate()};
             switch (keypadOutput[0])
             {
-                case '\0': //And other ignore cases. . .
+                case '\0': case '*': //And other ignore cases. . .
 
                     break;
                 case '#':
@@ -70,6 +71,7 @@ void codeDelegateUpdate()
                     code_delegate_state = WAITING;
                     break;
                 default:
+                    keypadOutput[1] = '\0'; //For some reason the chars DX are appended to the keypadOutput
                     strcat(tempCode, keypadOutput);
                     break;
             }
@@ -80,7 +82,11 @@ void codeDelegateUpdate()
 
 char* getNewestCode()
 {
-    return code;
+    static char toReturn[100];
+    memset(toReturn, 0, sizeof toReturn);
+    memcpy(toReturn, &code, sizeof code);
+    memset(code, 0, sizeof code);
+    return toReturn;
 }
 
 //=====[Implementations of private functions]==================================

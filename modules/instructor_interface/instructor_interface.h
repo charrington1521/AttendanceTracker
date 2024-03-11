@@ -15,6 +15,8 @@ bool isInstructorDone();
 
 void instructorInterfaceInit();
 
+void instructorInterfaceReset();
+
 void instructorInterfaceUpdate();
 
 //=====[#include guards - end]=================================================

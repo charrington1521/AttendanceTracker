@@ -49,48 +49,59 @@ void debounceButtonInit()
 
 buttonState_t debounceButtonUpdate()
 {
-    switch( buttonState ) {
+    switch( buttonState ) 
+    {
 
-    case BUTTON_UP:
-        if( *button ) {
-            buttonState = BUTTON_FALLING;
-            accumulatedDebounceButtonTime = 0;
-        }
-        break;
-
-    case BUTTON_FALLING:
-        if( accumulatedDebounceButtonTime >= DEBOUNCE_BUTTON_TIME_MS ) {
-            if( *button ) {
-                buttonState = BUTTON_DOWN;
-            } else {
-                buttonState = BUTTON_UP;
+        case BUTTON_UP:
+            if( *button ) 
+            {
+                buttonState = BUTTON_FALLING;
+                accumulatedDebounceButtonTime = 0;
             }
-        }
-        accumulatedDebounceButtonTime = accumulatedDebounceButtonTime +
-                                        TIME_INCREMENT_MS;
-        break;
+            break;
 
-    case BUTTON_DOWN:
-        if( !*button ) {
-            buttonState = BUTTON_RISING;
-            accumulatedDebounceButtonTime = 0;
-        }
-        break;
-
-    case BUTTON_RISING:
-        if( accumulatedDebounceButtonTime >= DEBOUNCE_BUTTON_TIME_MS ) {
-            if( !*button ) {
-                buttonState = BUTTON_UP;
-            } else {
-                buttonState = BUTTON_DOWN;
+        case BUTTON_FALLING:
+            if( accumulatedDebounceButtonTime >= DEBOUNCE_BUTTON_TIME_MS ) 
+            {
+                if( *button ) 
+                {
+                    buttonState = BUTTON_DOWN;
+                } 
+                else 
+                {
+                    buttonState = BUTTON_UP;
+                }
             }
-        }
-        accumulatedDebounceButtonTime = accumulatedDebounceButtonTime +
-                                        TIME_INCREMENT_MS;
+            accumulatedDebounceButtonTime = accumulatedDebounceButtonTime +
+                                            TIME_INCREMENT_MS;
         break;
 
-    default:
-        debounceButtonInit();
+        case BUTTON_DOWN:
+            if( !*button ) 
+            {
+                buttonState = BUTTON_RISING;
+                accumulatedDebounceButtonTime = 0;
+            }
+        break;
+
+        case BUTTON_RISING:
+            if( accumulatedDebounceButtonTime >= DEBOUNCE_BUTTON_TIME_MS ) 
+            {
+                if( !*button ) 
+                {
+                    buttonState = BUTTON_UP;
+                } 
+                else 
+                {
+                    buttonState = BUTTON_DOWN;
+                }
+            }
+            accumulatedDebounceButtonTime = accumulatedDebounceButtonTime +
+                                            TIME_INCREMENT_MS;
+        break;
+
+        default:
+            debounceButtonInit();
         break;
     }
     return buttonState;
