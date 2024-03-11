@@ -6,7 +6,6 @@
 
 #include "student_interface.h"
 #include "class_info.h"
-#include "lcd.h"
 #include "led.h"
 
 //=====[Declaration of private defines]========================================
@@ -35,6 +34,7 @@ void checkInMessage();
  */
 bool isCodeForAStudent(char* code)
 {
+
     return isCodeAStudent(code);
 }
 
@@ -47,9 +47,8 @@ void checkInStudent(char* code)
 void studentInterfaceInit()
 {
     classInfoInit();
-    lcdInit();
-    setColor(BLUE);
     ledInit(PB_4, PA_0, PD_12);
+    setColor(NO_COLOR);
 }
 
 /**
@@ -63,19 +62,18 @@ void studentInterfaceUpdate(char * code)
     {
         lcdClear();
         lcdCharPositionWrite( 0,0 );
-        lcdStringWrite("Welcome. . .    ");
+        lcdStringWrite("Awaiting Student");
+        lcd_write_delay_ms = 0;
     }
     if (isCodeForAStudent(code))
     {
         checkInStudent(code);
+        // set the color. . .
         blinkLed();
         checkInMessage();
     }
 
     ledUpdate();
-    // Should check if code belongs to a student, and if it does
-    // Should blink the led, check the student in, and display some
-    // message to the LCD 
 }
 
 //=====[Implementations of private functions]==================================
