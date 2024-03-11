@@ -13,6 +13,14 @@
 
 //=====[Declaration of private data types]=====================================
 
+typedef enum
+{
+    FIRST,
+    SECOND,
+    THIRD,
+    BASE,
+} blink_state_t;   
+
 //=====[Declaration and initialization of private global objects]===============
 
 static PwmOut* red;
@@ -28,6 +36,8 @@ static PwmOut* leds[] = {red, green, blue};
 //=====[Declaration and initialization of private global variables]============
 
 static led_color_t current_color;
+static blink_state_t cycle_pos;
+static int accumulated_time = 0;
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -40,6 +50,7 @@ static void setColor(int red, int green, int blue);
 
 void setColor(led_color_t color)
 {
+    current_color = color;
     switch(color)
     {
         case RED:
@@ -62,9 +73,7 @@ void setColor(led_color_t color)
  */
 void blinkLed()
 {
-    //Should work non blocking, e.g. this should just set some
-        //variables so that the update properly handles the blinking
-        //For the 500ms use BLINK_LENGTH_MS
+    cycle_pos = FIRST;
 }
 
 void ledInit(const PinName redPin, const PinName greenPin, const PinName bluePin)
@@ -86,8 +95,51 @@ void ledInit(const PinName redPin, const PinName greenPin, const PinName bluePin
 
 void ledUpdate()
 {
-    //The updating needs to handle blinking
-        //This can be done using the TIME_INCREMENT_MS. . .
+    switch(cycle_pos)
+    {
+        case FIRST:
+            setColor(current_color);
+            if (accumulated_time >= BLINK_LENGTH_MS )
+            {
+                accumulated_time = 0;
+                cycle_pos = SECOND;
+            }
+            else
+            {
+                accumulated_time += TIME_INCREMENT_MS;
+            }
+        break;
+
+        case SECOND:
+            setColor(NO_COLOR);
+            if (accumulated_time >= BLINK_LENGTH_MS*2 )
+            {
+                accumulated_time = 0;
+                cycle_pos = SECOND;
+            }
+            else
+            {
+                accumulated_time += TIME_INCREMENT_MS;
+            }
+        break;
+
+        case THIRD:
+            setColor(current_color);
+            if (accumulated_time >= BLINK_LENGTH_MS*3 )
+            {
+                accumulated_time = 0;
+                cycle_pos = SECOND;
+            }
+            else
+            {
+                accumulated_time += TIME_INCREMENT_MS;
+            }
+        break;
+
+        default:
+        break;
+        
+    }
 }
 
 //=====[Implementations of private functions]==================================
