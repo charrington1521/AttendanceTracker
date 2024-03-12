@@ -4,6 +4,9 @@ This system has three important goals:
 
 | Goal | Result | Comments
 | --- | --- | --- |
-| Students can check within 5 seconds | --- | --- |
-| Instructors can view student attendance info for upwards of 4 students | --- | --- |
-| Instructors can change the start time of their class | --- | --- |
+| Students can check within 5 seconds |
+| spec1 | --- | --- |
+| Instructors can view student attendance info for upwards of 4 students |
+| spec2 | --- | --- |
+| Instructors can change the start time of their class |
+| spec3 | --- | --- |
