@@ -7,14 +7,23 @@
 
 //=====[Declaration of public defines]=========================================
 
+/**
+ * The delay used within the attendance tracking system
+ */
 #define TIME_INCREMENT_MS                                   10
 
 //=====[Declaration of public data types]======================================
 
 //=====[Declarations (prototypes) of public functions]=========================
 
+/**
+ * Initializes the attendance tracking system
+ */
 void attendanceTrackingInit();
 
+/**
+ * Updates the attendance tracking system
+ */
 void attendanceTrackingUpdate();
 
 //=====[#include guards - end]=================================================

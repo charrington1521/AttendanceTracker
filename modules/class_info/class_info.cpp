@@ -10,7 +10,7 @@
 
 //=====[Declaration of private defines]========================================
 
-const char* STUDENT_CODES[NUM_STUDENTS] = {"123ABC", "ABCDAB"};
+const char* STUDENT_CODES[NUM_STUDENTS] = {"123ABC", "ABCDAB", "AAAAAA", "456789", "000000"};
 
 //=====[Declaration of private data types]=====================================
 
@@ -55,20 +55,17 @@ bool isStudentOnTime(char* code)
     return studentByIndex(indexOfStudentByCode(code))->timeResult == ON_TIME;
 }
 
-void checkInStudentByCode(char* code)
+student_time_result_t checkInStudentByCode(char* code)
 {
     tm* currentTime = dateAndTimeRead();
     student_time_result_t check_in_result;
-    char str[2];
-    sprintf(str, "%d", currentTime->tm_hour%24);
-    lcdStringWrite(str);
     if (currentTime->tm_hour%24 < classStartTime[HOUR]) 
     {
-        check_in_result = LATE;
+        check_in_result = EARLY;
     }
     else if (currentTime->tm_hour%24 > classStartTime[HOUR])
     {
-        check_in_result = EARLY;
+        check_in_result = LATE;
     }
     else
     {
@@ -87,6 +84,7 @@ void checkInStudentByCode(char* code)
     }
 
     studentByIndex(indexOfStudentByCode(code))->timeResult = check_in_result;
+    return studentByIndex(indexOfStudentByCode(code))->timeResult;
 }
 
 /**
@@ -111,8 +109,11 @@ void classInfoInit()
         studentInfo[i] = new StudentInfo;
         studentInfo[i]->timeResult = ABSENT;
     }
-    studentInfo[0]->name = "Amy";
-    studentInfo[1]->name = "Bob";
+    studentInfo[0]->name = "James";
+    studentInfo[1]->name = "Helen";
+    studentInfo[2]->name = "Collin";
+    studentInfo[3]->name = "Louis";
+    studentInfo[4]->name = "Cherrice";
 }
 
 void classInfoUpdate()

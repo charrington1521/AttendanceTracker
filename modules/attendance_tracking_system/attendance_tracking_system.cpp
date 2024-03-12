@@ -1,9 +1,11 @@
 //=====[Libraries]=============================================================
 
 #include "lcd.h"
+#include "matrix_keypad.h"
 #include "mbed.h"
 #include "arm_book_lib.h"
 
+#include "matrix_keypad.h"
 #include "attendance_tracking_system.h"
 #include "instructor_interface.h"
 #include "student_interface.h"
@@ -30,7 +32,98 @@ bool isInstructorInterface = false;
 
 void attendanceTrackingInit()
 {
-    dateAndTimeWrite(2024, 03, 10, 8, 10, 00);
+    matrixKeypadInit(TIME_INCREMENT_MS);
+    char year[5] = "";
+    char month[3] = "";
+    char day[3] = "";
+    char hour[3] = "";
+    char minute[3] = "";
+    char second[3] = "";
+    int i = 0;
+    while (i < 4)
+    {
+        char read = matrixKeypadUpdate();
+        if (read == '\0')
+        {
+            delay(TIME_INCREMENT_MS);
+        }
+        else
+        {
+            year[i] = read;
+            i++;
+        }
+    }
+    i = 0;
+    while (i < 2)
+    {
+        char read = matrixKeypadUpdate();
+        if (read == '\0')
+        {
+            delay(TIME_INCREMENT_MS);
+        }
+        else
+        {
+            month[i] = read;
+            i++;
+        }
+    }
+    i = 0;
+    while (i < 2)
+    {
+        char read = matrixKeypadUpdate();
+        if (read == '\0')
+        {
+            delay(TIME_INCREMENT_MS);
+        }
+        else
+        {
+            day[i] = read;
+            i++;
+        }
+    }
+    i = 0;
+    while (i < 2)
+    {
+        char read = matrixKeypadUpdate();
+        if (read == '\0')
+        {
+            delay(TIME_INCREMENT_MS);
+        }
+        else
+        {
+            hour[i] = read;
+            i++;
+        }
+    }
+    i = 0;
+    while (i < 2)
+    {
+        char read = matrixKeypadUpdate();
+        if (read == '\0')
+        {
+            delay(TIME_INCREMENT_MS);
+        }
+        else
+        {
+            minute[i] = read;
+            i++;
+        }
+    }
+    i = 0;
+    while (i < 2)
+    {
+        char read = matrixKeypadUpdate();
+        if (read == '\0')
+        {
+            delay(TIME_INCREMENT_MS);
+        }
+        else
+        {
+            second[i] = read;
+            i++;
+        }
+    }
+    dateAndTimeWrite(atoi(year), atoi(month), atoi(day), atoi(hour), atoi(minute), atoi(second));
     lcdInit();
     codeDelegateInit();
     instructorInterfaceInit();
@@ -51,7 +144,6 @@ void attendanceTrackingUpdate()
     {
         codeDelegateUpdate();
 
-        //lcdStringWrite("Newest Code");
         char* newestCode = getNewestCode(); 
 
         if (isCodeForInstructor(newestCode))

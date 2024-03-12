@@ -40,6 +40,7 @@ static int studentViewIndex = 0;
 static int dateTimeIndex = 0;
 
 static instructor_interface_state_t state;
+static char newClassTime[4];
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -90,6 +91,8 @@ void instructorInterfaceUpdate()
         case VIEWING_STUDENTS:
             if (matrixKeypadUpdate() == '#')
             {
+                dateTimeIndex = 0;
+                memcpy(newClassTime, 0, sizeof newClassTime);
                 state = SETTING_TIME;
             }
             else
@@ -138,7 +141,7 @@ void instructorInterfaceUpdate()
                         break;
 
                         default:
-                            lcdStringWrite("No Time Info");
+                            lcdStringWrite("Not Checked In");
                         break;
                     }
                     lcdWriteDelayMs = 0;
@@ -147,7 +150,7 @@ void instructorInterfaceUpdate()
         break;
 
         case SETTING_TIME:
-            char newClassTime[4];
+            static char newClassTime[4] = "";
             lcdWriteDelayMs += TIME_INCREMENT_MS;
             if (lcdWriteDelayMs >= 1000) 
             {
@@ -157,24 +160,24 @@ void instructorInterfaceUpdate()
                 lcdCharPositionWrite( 0,1 );
                 lcdStringWrite("(HH:MM)   :     ");
                 lcdCharPositionWrite( 8,1 );
-                //Displaying the time as it is entered. . . 
+                char str[3] = ""; str[0] = newClassTime[0]; str[1] = newClassTime[1];
+                lcdStringWrite(str); 
+                lcdCharPositionWrite( 11,1 ); 
+                char str2[3] = ""; str2[0] = newClassTime[2]; str2[1] = newClassTime[3];
+                lcdStringWrite(str2); 
                 lcdWriteDelayMs = 0;
             }
             //Display the new date and time entry. . . ?
             //lcdCharPositionWrite( 8,1 );
             char keypadEntry[] = {matrixKeypadUpdate()};
-            if (isDigit(keypadEntry[0]))
-            {
-                lcdStringWrite("Is a Digit");
-            }
             if (isDigit(keypadEntry[0]) && dateTimeIndex < 4)
             {
                 newClassTime[dateTimeIndex] = keypadEntry[0];
                 dateTimeIndex++;
                 if (dateTimeIndex == 4)
                 {
-                    char hour[2];
-                    char min[2];
+                    char hour[3] = "";
+                    char min[3] = "";
                     hour[0] = newClassTime[0]; hour[1] = newClassTime[1];
                     min[0]  = newClassTime[2]; min[1]  = newClassTime[3];
                     setClassStartTime(atoi(hour), atoi(min));

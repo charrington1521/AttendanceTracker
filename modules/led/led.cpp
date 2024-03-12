@@ -32,7 +32,7 @@ static PwmOut* leds[3];
 //=====[Declaration and initialization of private global variables]============
 
 static led_color_t current_color;
-static blink_state_t cycle_pos;
+static blink_state_t cycle_pos = BASE;
 static int accumulated_time = 0;
 
 //=====[Declarations (prototypes) of private functions]========================
@@ -46,17 +46,19 @@ static void setColor(int red, int green, int blue);
 
 void setColor(led_color_t color)
 {
-    current_color = color;
     switch(color)
     {
         case RED:
             setColor(255, 0, 0);
+            current_color = color;
             break;
         case GREEN:
             setColor(0, 255, 0);
+            current_color = color;
             break;
         case BLUE:
             setColor(0, 0, 255);
+            current_color = color;
             break;
         default:
             setColor(0, 0, 0);
@@ -106,10 +108,10 @@ void ledUpdate()
 
         case SECOND:
             setColor(NO_COLOR);
-            if (accumulated_time >= BLINK_LENGTH_MS*2 )
+            if (accumulated_time >= BLINK_LENGTH_MS )
             {
                 accumulated_time = 0;
-                cycle_pos = SECOND;
+                cycle_pos = THIRD;
             }
             else
             {
@@ -119,10 +121,10 @@ void ledUpdate()
 
         case THIRD:
             setColor(current_color);
-            if (accumulated_time >= BLINK_LENGTH_MS*3 )
+            if (accumulated_time >= BLINK_LENGTH_MS )
             {
                 accumulated_time = 0;
-                cycle_pos = SECOND;
+                cycle_pos = BASE;
             }
             else
             {
@@ -131,6 +133,7 @@ void ledUpdate()
         break;
 
         default:
+            setColor(NO_COLOR);
         break;
         
     }

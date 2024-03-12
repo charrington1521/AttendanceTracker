@@ -24,7 +24,9 @@ int lcd_write_delay_ms;
 
 //=====[Declarations (prototypes) of private functions]========================
 
-void checkInMessage();
+static void checkInMessage();
+
+static student_time_result_t checkInStudent(char * code);
 
 //=====[Implementations of public functions]===================================
 
@@ -38,18 +40,11 @@ bool isCodeForAStudent(char* code)
     return isCodeAStudent(code);
 }
 
-//Should this be public???
-void checkInStudent(char* code)
-{
-    checkInStudentByCode(code);
-}
+
 
 void studentInterfaceInit()
 {
-    consoleWrite("Student Interface Init\r\n", 24);
     classInfoInit();
-    lcdInit();
-    setColor(NO_COLOR);
     ledInit(PB_4, PA_0, PD_12);
     setColor(NO_COLOR);
 }
@@ -60,7 +55,6 @@ void studentInterfaceInit()
  */
 void studentInterfaceUpdate(char * code)
 {
-    consoleWrite("Student Interface Update\r\n", 26);
     lcd_write_delay_ms += TIME_INCREMENT_MS;
     if (lcd_write_delay_ms >= 1000)
     {
@@ -71,8 +65,20 @@ void studentInterfaceUpdate(char * code)
     }
     if (isCodeForAStudent(code))
     {
-        checkInStudent(code);
-        // set the color. . .
+        switch(checkInStudent(code))
+        {
+            case EARLY: case ON_TIME:
+                setColor(GREEN);
+            break;
+
+            case LATE:
+                setColor(RED);
+            break;
+
+            default:
+                setColor(NO_COLOR);
+            break;
+        }
         blinkLed();
         checkInMessage();
     }
@@ -82,9 +88,15 @@ void studentInterfaceUpdate(char * code)
 
 //=====[Implementations of private functions]==================================
 
+student_time_result_t checkInStudent(char* code)
+{
+    return checkInStudentByCode(code);
+}
+
 void checkInMessage()
 {
     lcdClear();
     lcdCharPositionWrite( 0,0 );
     lcdStringWrite("Welcome. . .    ");
 }
+
