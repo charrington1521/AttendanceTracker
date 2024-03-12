@@ -6,7 +6,6 @@
 
 #include "student_interface.h"
 #include "class_info.h"
-#include "lcd.h"
 #include "led.h"
 
 //=====[Declaration of private defines]========================================
@@ -25,7 +24,9 @@ int lcd_write_delay_ms;
 
 //=====[Declarations (prototypes) of private functions]========================
 
-void checkInMessage();
+static void checkInMessage();
+
+static student_time_result_t checkInStudent(char * code);
 
 //=====[Implementations of public functions]===================================
 
@@ -35,22 +36,17 @@ void checkInMessage();
  */
 bool isCodeForAStudent(char* code)
 {
+
     return isCodeAStudent(code);
 }
 
-//Should this be public???
-void checkInStudent(char* code)
-{
-    checkInStudentByCode(code);
-}
+
 
 void studentInterfaceInit()
 {
-    consoleWrite("Student Interface Init\r\n", 24);
     classInfoInit();
-    lcdInit();
-    setColor(NO_COLOR);
     ledInit(PB_4, PA_0, PD_12);
+    setColor(NO_COLOR);
 }
 
 /**
@@ -59,28 +55,43 @@ void studentInterfaceInit()
  */
 void studentInterfaceUpdate(char * code)
 {
-    consoleWrite("Student Interface Update\r\n", 26);
     lcd_write_delay_ms += TIME_INCREMENT_MS;
     if (lcd_write_delay_ms >= 1000)
     {
         lcdClear();
         lcdCharPositionWrite( 0,0 );
-        lcdStringWrite("Welcome. . .    ");
+        lcdStringWrite("Awaiting Student");
+        lcd_write_delay_ms = 0;
     }
     if (isCodeForAStudent(code))
     {
-        checkInStudent(code);
+        switch(checkInStudent(code))
+        {
+            case EARLY: case ON_TIME:
+                setColor(GREEN);
+            break;
+
+            case LATE:
+                setColor(RED);
+            break;
+
+            default:
+                setColor(NO_COLOR);
+            break;
+        }
         blinkLed();
         checkInMessage();
     }
 
     ledUpdate();
-    // Should check if code belongs to a student, and if it does
-    // Should blink the led, check the student in, and display some
-    // message to the LCD 
 }
 
 //=====[Implementations of private functions]==================================
+
+student_time_result_t checkInStudent(char* code)
+{
+    return checkInStudentByCode(code);
+}
 
 void checkInMessage()
 {
@@ -88,3 +99,4 @@ void checkInMessage()
     lcdCharPositionWrite( 0,0 );
     lcdStringWrite("Welcome. . .    ");
 }
+

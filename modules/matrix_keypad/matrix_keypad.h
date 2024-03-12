@@ -9,7 +9,14 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
+/**
+ * Initializes a matrix keypad using the given time increment
+ */
 void matrixKeypadInit( int updateTime_ms );
+
+/**
+ * 
+ */
 char matrixKeypadUpdate();
 
 //=====[#include guards - end]=================================================

@@ -1,11 +1,15 @@
 //=====[Libraries]=============================================================
 
 #include "attendance_tracking_system.h"
+#include "lcd.h"
 #include "mbed.h"
 #include "arm_book_lib.h"
 
 #include "matrix_keypad.h"
-//#include "qr_code.h"
+// #include "zbar.h"
+// #include "ov7670.h"
+
+// using namespace zbar;
 
 
 //=====[Declaration of private defines]========================================
@@ -26,12 +30,23 @@ typedef enum
 
 //=====[Declaration and initialization of private global variables]============
 
+//static zbar_decoder_t decoder = zbar_decoder_create();
+
+//static zbar_image_t newestImage = zbar_image_create();
+
+// static OV7670 camera {
+//      Pins. .. . 
+// }
+
+// static ImageScanner scanner;
+
+// static Image image;
+
 static char code[100];
 
 static char tempCode[100];
 
 static code_delegate_state_t code_delegate_state = WAITING;
-
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -44,6 +59,15 @@ static code_delegate_state_t code_delegate_state = WAITING;
 void codeDelegateInit()
 {
     matrixKeypadInit(TIME_INCREMENT_MS);
+
+    // scanner.set_config(ZBAR_NONE, ZBAR_CFG_ENABLE, 1);
+    // scanner.set_config(ZBAR_EAN8, ZBAR_CFG_ENABLE, 1);
+
+    // camera.CaptureNext();
+
+    // image.set_data(,);
+    // scanner.recycle_image(image);
+    // SymbolSet results = scanner.get_results();
 }
 
 void codeDelegateUpdate()
@@ -59,10 +83,11 @@ void codeDelegateUpdate()
             }
             break;
         case SCANNING:
-            char keypadOutput[] = {matrixKeypadUpdate()};
+            char keypadOutput[2] = "";
+            keypadOutput[0] = matrixKeypadUpdate();
             switch (keypadOutput[0])
             {
-                case '\0': //And other ignore cases. . .
+                case '\0': case '*': //And other ignore cases. . .
 
                     break;
                 case '#':
@@ -80,7 +105,11 @@ void codeDelegateUpdate()
 
 char* getNewestCode()
 {
-    return code;
+    static char toReturn[100];
+    memset(toReturn, 0, sizeof toReturn);
+    memcpy(toReturn, &code, sizeof code);
+    memset(code, 0, sizeof code);
+    return toReturn;
 }
 
 //=====[Implementations of private functions]==================================

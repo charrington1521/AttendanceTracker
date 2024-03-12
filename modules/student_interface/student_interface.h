@@ -10,13 +10,15 @@
 //=====[Declarations (prototypes) of public functions]=========================
 
 /**
- *  Returns true if the given code is for a student,
- *      false otherwise
+ * @param code a string
+ * @return true if the code represents a student
+            false otherwise
  */
 bool isCodeForAStudent(char* code);
 
-void checkInStudent(char* code);
-
+/**
+ *  Initializes the student interface
+ */
 void studentInterfaceInit();
 
 /**

@@ -75,6 +75,8 @@ DigitalOut lcdEn( D9 );
 
 //=====[Declaration and initialization of private global variables]============
 
+static UnbufferedSerial serialUsb(USBTX, USBRX, 115200);
+
 //=====[Declarations (prototypes) of private functions]========================
 
 static void lcdPinWrite( uint8_t pinName, int value );
@@ -174,16 +176,18 @@ void lcdCharPositionWrite( uint8_t charPositionX, uint8_t charPositionY )
 void lcdStringWrite( const char * str )
 {
     while (*str) {
+        serialUsb.write(str, 1);
         lcdCodeWrite(LCD_RS_DATA, *str++);
     }
+    serialUsb.write("\r\n", 2);
+
 }
 
 void lcdClear()
 {
-    lcdCharPositionWrite( 0,0 );
-    lcdStringWrite("                ");
-    lcdCharPositionWrite( 0,1 );
-    lcdStringWrite("                ");
+    lcdCodeWrite( LCD_RS_INSTRUCTION, 
+                      LCD_IR_CLEAR_DISPLAY );       
+    delay( 1 ); 
 }
 
 

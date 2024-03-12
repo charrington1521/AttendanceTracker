@@ -19,20 +19,28 @@ typedef enum
 
 //=====[Declarations (prototypes) of public functions]=========================
 
+/**
+ * Changes the color of the led
+ * @param color the color to set the led to
+ */
 void setColor(led_color_t color);
 
 /**
- *  Causes the led to blink two times with 500ms Up and Down times
+ * Causes the led to blink two times 
  */
 void blinkLed();
 
 /**
- *  Initializes a RGB led with the given list of pin names
- * The PinName list is expected in the following format:
- *  PWM pin Red, PWM pin Green, PWM pin Blue
+ * Initializes a tri color led given 3 pins
+ * @param redPin
+ * @param greenPin
+ * @param bluePin
  */
 void ledInit(const PinName redPin, const PinName greenPin, const PinName bluePin);
 
+/**
+ * Updates the led
+ */
 void ledUpdate();
 
 //=====[#include guards - end]=================================================

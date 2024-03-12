@@ -23,8 +23,8 @@
 tm* dateAndTimeRead()
 {
     time_t epochSeconds;
-    epochSeconds = time(NULL);
-    return gmtime(&epochSeconds);    
+    time (&epochSeconds);
+    return localtime(&epochSeconds);  
 }
 
 void dateAndTimeWrite( int year, int month, int day, 
