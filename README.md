@@ -10,11 +10,11 @@ This system has three important goals:
 | System blinks led red when student is NOT on time or early | PASS | --- |
 | System blinks led green when student IS on time or early | PASS | --- |
 | **2. Instructors can view student attendance info for upwards of 4 students** |
-| Instrutor can log in using the keypad | PASS | --- |
-| Instrutor can view in student attendance info on display | PASS | --- |
-| Instrutor can change visible student info using the button | PASS | --- |
-| Instrutor can use the attendance system with more than four students | PASS | --- |
-| Instrutor can change log out by holding the button | PASS | --- |
+| Instructor can log in using the keypad | PASS | --- |
+| Instructor can view in student attendance info on display | PASS | --- |
+| Instructor can change visible student info using the button | PASS | --- |
+| Instructor can use the attendance system with more than four students | PASS | --- |
+| Instructor can change log out by holding the button | PASS | --- |
 | **3. Instructors can change the start time of their class** |
 | Instructor can change the class start time in after logging in by using keypad | PASS | --- |
 | After logging out, new student check ins are affected by the keypad | PASS | --- |
