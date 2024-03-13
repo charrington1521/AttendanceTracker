@@ -17,6 +17,6 @@ This system has three important goals:
 | Instructor can change log out by holding the button | PASS | --- |
 | **3. Instructors can change the start time of their class** |
 | Instructor can change the class start time in after logging in by using keypad | PASS | --- |
-| After logging out, new student check ins are affected by the keypad | PASS | --- |
+| After logging out, new student check ins are affected by the new class time | PASS | --- |
 
 
